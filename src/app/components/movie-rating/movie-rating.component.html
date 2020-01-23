@@ -1,6 +1,16 @@
-<mat-toolbar color="primary">{{title}}</mat-toolbar>
+<mat-toolbar color="primary">
+    <div class="title">{{title}}</div>
+    <button mat-flat-button (click)="randomizeRating()">Random Rating</button>
+</mat-toolbar>
 <mat-list>
     <mat-list-item *ngFor="let movie of movies$ | async">
-        <p matLine>{{movie.name}}</p>
+        <div class="name">{{movie.name}}</div>
+        <div class="rating">
+            <div class="star" *ngFor="let i of [1, 2, 3, 4, 5]" (click)="rateMovie(movie.id, i)">
+                <i class="material-icons">
+                    {{i <= movie.rating ? 'star' : 'star_border'}}
+                </i>
+            </div>
+        </div>
     </mat-list-item>
 </mat-list>

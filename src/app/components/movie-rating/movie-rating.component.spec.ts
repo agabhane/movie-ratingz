@@ -1,4 +1,4 @@
-import { TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 import { MovieRatingComponent } from './movie-rating.component';
 import { MatToolbarModule, MatListModule } from '@angular/material';
 import { provideMockStore, MockStore } from "@ngrx/store/testing";
@@ -67,6 +67,54 @@ describe('MovieRating', () => {
       expect(movies.length).toEqual(2);
       done();
     });
-  })
+  });
+
+  it('should dispatch rate movie action', () => {
+    spyOn(store, 'dispatch');
+    component.rateMovie(2, 4);
+    expect(store.dispatch).toHaveBeenCalledWith({
+      type: '[Movie Rating] Rate movie',
+      id: 2,
+      rating: 4
+    });
+  });
+
+  it('should dispatch sort movie action on rateing a movie', () => {
+    spyOn(store, 'dispatch');
+    component.rateMovie(2, 4);
+    expect(store.dispatch).toHaveBeenCalledWith({
+      type: '[Movie Rating] Rate movie',
+      id: 2,
+      rating: 4
+    });
+    expect(store.dispatch).toHaveBeenCalledWith({
+      type: '[Movie Rating] Sort movies'
+    });
+  });
+
+  it('should rate random movie with random rating at random interval', fakeAsync(() => {
+    spyOn(store, 'dispatch');
+    store.setState({
+      movies: [{
+        id: 1,
+        name: 'One 1',
+        rating: 2
+      }, {
+        id: 2,
+        name: 'Two 2',
+        rating: 4
+      }]
+    });
+    fixture.detectChanges();
+    component.randomizeRating();
+    tick(3000);
+    expect(store.dispatch).toHaveBeenCalledWith(jasmine.objectContaining({
+      type: '[Movie Rating] Rate movie'
+    }));
+    expect(store.dispatch).toHaveBeenCalledWith({
+      type: '[Movie Rating] Sort movies'
+    });
+    component.randomizeRating();
+  }))
 
 });
