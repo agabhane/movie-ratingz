@@ -3,14 +3,27 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MovieRatingComponent } from './components/movie-rating/movie-rating.component';
+import { MatToolbarModule, MatListModule } from "@angular/material";
+import { StoreModule } from '@ngrx/store';
+import { movieRatingReducer } from './store/reducers/movie-rating.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { MovieRatingEffect } from './store/effects/movie-rating.effect';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MovieRatingComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatListModule,
+    StoreModule.forRoot({
+      movies: movieRatingReducer
+    }),
+    EffectsModule.forRoot([MovieRatingEffect])
   ],
   providers: [],
   bootstrap: [AppComponent]

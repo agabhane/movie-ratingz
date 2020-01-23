@@ -1,0 +1,6 @@
+<mat-toolbar color="primary">{{title}}</mat-toolbar>
+<mat-list>
+    <mat-list-item *ngFor="let movie of movies$ | async">
+        <p matLine>{{movie.name}}</p>
+    </mat-list-item>
+</mat-list>
